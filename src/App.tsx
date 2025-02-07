@@ -42,9 +42,13 @@ export const App = () => {
   };
 
   return (
-    <div className="flex flex-row h-screen w-scree">
-      <div className="w-md lg:w-lg  flex flex-col bg-white shadow-lg">
-        <PointList onDelete={() => {}} onEdit={() => {}} points={points} />
+    <div className="flex flex-row h-screen w-screen">
+      <div className="shadow-lg min-w-md">
+        <PointList
+          onDelete={handleDeletePoint}
+          onEdit={handleEditPoint}
+          points={points}
+        />
       </div>
       <div className="w-full h-[100vh]">
         <MapComponent points={points} onMapClick={handleMapClick} />
