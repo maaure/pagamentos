@@ -39,7 +39,6 @@ export const MapComponent = ({ points, onMapClick }: MapComponentProps) => {
       center={[-15.77972, -47.92972]}
       zoom={13}
       style={{ height: "100%", width: "100%" }}
-      className="rounded-lg"
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
