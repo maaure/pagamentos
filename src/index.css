@@ -1,1 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import "tailwindcss";
+
+body {
+  font-family: "Inter", serif;
+}
+
+.btn {
+  @apply py-2 px-4 w-full  text-white font-medium text-lg h-[44px] rounded-[15px] cursor-pointer transition-colors duration-300 ease-in-out;
+}
+
+.btn-primary {
+  @apply bg-emerald-500;
+}
+
+.btn-primary:hover {
+  @apply bg-emerald-600;
+}
+
+.input-rounded {
+  @apply bg-gray-50 text-gray-600 border-1 border-gray-500 rounded-[15px] px-4 py-3;
+}
