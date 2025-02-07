@@ -10,7 +10,7 @@ interface PointListProps {
 
 export const PointList = ({ points, onEdit, onDelete }: PointListProps) => {
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col w-full">
       <div
         className="flex flex-col p-6 gap-4 bg-white"
         style={{ boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.04)" }}
@@ -22,7 +22,7 @@ export const PointList = ({ points, onEdit, onDelete }: PointListProps) => {
           }}
         />
       </div>
-      <ul className="flex flex-col flex-1 overflow-y-auto p-6 gap-4">
+      <ul className="flex flex-col flex-1 overflow-y-auto p-6 gap-4 scrollbar-thin">
         {points.map((point) => (
           <PointCard
             key={point.id}
