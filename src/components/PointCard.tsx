@@ -14,7 +14,7 @@ export const PointCard = ({
   const { name, description, value, badges } = point;
 
   return (
-    <li className="bg-white py-5 px-4 rounded-[15px] gap-2 border border-gray-300">
+    <li className="bg-white py-5 px-4 rounded-[15px] flex flex-col gap-2 border border-gray-300">
       {/* Título, descrição e dropdown */}
       <div className="flex flex-col gap-0">
         <div className="flex justify-between">
@@ -23,14 +23,13 @@ export const PointCard = ({
         </div>
         <p className="text-xs text-normal text-gray-500">{description}</p>
       </div>
-
       {/* Valor e badges */}
-      <div className="flex flex-col">
-        <p className="text-sm text-emerald-800">
-          <i className="fa-solid fa-coins" /> R$ {value}
-        </p>
-        <p className="text-sm text-gray-500">{badges.join(" • ")}</p>
-      </div>
+      <p className="text-sm text-emerald-600">
+        <i className="fa-solid fa-coins" /> R$ {value}
+        <span className="text-sm text-gray-500">
+          {` • ${badges.join(" • ")}`}
+        </span>
+      </p>
     </li>
   );
 };
