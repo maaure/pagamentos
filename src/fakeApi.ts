@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
 export interface Point {
   id: string;
@@ -25,7 +25,7 @@ export const generatePoints = (count: number): Point[] => {
 export const fetchPoints = async (): Promise<Point[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(generatePoints(2));
+      resolve(generatePoints(10));
     }, 1000);
   });
 };

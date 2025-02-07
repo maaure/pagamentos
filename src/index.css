@@ -6,7 +6,7 @@ body {
 }
 
 .btn {
-  @apply py-2 px-4 w-full  text-white font-medium text-lg h-[44px] rounded-[15px] cursor-pointer transition-colors duration-300 ease-in-out;
+  @apply py-2 px-4 w-full text-white font-medium text-lg h-[44px] rounded-[15px] cursor-pointer transition-colors duration-300 ease-in-out;
 }
 
 .btn-primary {
