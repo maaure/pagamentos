@@ -21,3 +21,7 @@
 .btn-secondary:hover {
   @apply bg-teal-600;
 }
+
+.btn:disabled {
+  @apply bg-gray-300 text-gray-600 cursor-not-allowed;
+}
