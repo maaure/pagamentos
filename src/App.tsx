@@ -3,7 +3,6 @@ import { MapComponent } from "./components/MapComponent";
 import { PointForm } from "./components/PointForm";
 import { PointList } from "./components/PointList";
 import { fetchPoints, Point } from "./fakeApi";
-import { Point } from "leaflet";
 
 export const App = () => {
   const [points, setPoints] = useState<Point[]>([]);
@@ -53,6 +52,7 @@ export const App = () => {
           onNew={() => {
             setIsFormExpanded(true);
           }}
+          disableNew={isFormExpanded}
         />
       </div>
       <div

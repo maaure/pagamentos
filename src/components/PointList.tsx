@@ -7,6 +7,7 @@ interface PointListProps {
   onEdit: (point: Point) => void;
   onDelete: (id: string) => void;
   onNew: () => void;
+  disableNew?: boolean;
 }
 
 export const PointList = ({
@@ -14,6 +15,7 @@ export const PointList = ({
   onEdit,
   onDelete,
   onNew,
+  disableNew,
 }: PointListProps) => {
   return (
     <div className="h-screen flex flex-col w-full">
@@ -36,7 +38,11 @@ export const PointList = ({
         ))}
       </ul>
       <div className="p-6 bg-white shadow-[0_-8px_16px_rgba(0,0,0,0.04)]">
-        <button className="btn btn-primary w-full" onClick={onNew}>
+        <button
+          className="btn btn-primary w-full"
+          onClick={onNew}
+          disabled={disableNew}
+        >
           Novo Pagamento
         </button>
       </div>
