@@ -28,7 +28,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
           name="search"
           id="search"
           placeholder="Pesquise nos seus pagamentos..."
-          className="input-rounded w-full"
+          className="input w-full"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
