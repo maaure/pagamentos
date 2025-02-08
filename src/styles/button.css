@@ -1,9 +1,13 @@
 .btn {
-  @apply py-2 px-4 font-medium text-lg h-[44px] rounded-[15px] cursor-pointer transition-colors duration-300 ease-in-out;
+  @apply py-2 px-4 font-medium text-lg rounded-[15px] cursor-pointer transition-colors duration-300 ease-in-out;
 }
 
 .btn-circle {
-  @apply rounded-full;
+  @apply font-medium rounded-full p-2 text-center inline-flex items-center;
+}
+
+.btn-circle > i {
+  @apply w-4 h-4;
 }
 
 .btn-primary {
@@ -24,4 +28,8 @@
 
 .btn:disabled {
   @apply bg-gray-300 text-gray-600 cursor-not-allowed;
+}
+
+.btn-ghost {
+  @apply hover:bg-gray-100 transition-colors;
 }
