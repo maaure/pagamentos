@@ -15,11 +15,11 @@
 }
 
 .btn-secondary {
-  @apply bg-teal-500 text-white;
+  @apply bg-indigo-500 text-white;
 }
 
 .btn-secondary:hover {
-  @apply bg-teal-600;
+  @apply bg-indigo-600;
 }
 
 .btn:disabled {

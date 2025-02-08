@@ -107,6 +107,7 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
             placeholder="Digite o valor desse pagamento"
             label="Valor"
             type="number"
+            currency="R$"
             step="0.01"
             {...register("valor")}
             error={errors.valor?.message}
@@ -131,7 +132,7 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
 
         <button
           type="submit"
-          className="w-full btn btn-primary"
+          className="w-full btn btn-secondary"
           disabled={!isValid}
         >
           Salvar
