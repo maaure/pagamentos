@@ -2,16 +2,29 @@ import { useState, useEffect } from "react";
 import { MapComponent } from "./components/MapComponent";
 import { PointForm } from "./components/PointForm";
 import { PointList } from "./components/PointList";
-import { fetchPoints, Point } from "./fakeApi";
+import { Point } from "./fakeApi";
+import MapService from "./services/MapService";
 
 export const App = () => {
   const [points, setPoints] = useState<Point[]>([]);
-  const [selectedPoint, setSelectedPoint] = useState<Point | null>(null);
+  const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(
+    undefined,
+  );
   const [isFormExpanded, setIsFormExpanded] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchPoints().then((data) => setPoints(data));
+    fetchData();
   }, []);
+
+  const fetchData = () => {
+    setLoading(true);
+    MapService.getAllPoints()
+      .then((data) => setPoints(data))
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const handleAddPoint = (point: Omit<Point, "id">) => {
     const newPoint = { ...point, id: Math.random().toString() };
@@ -29,7 +42,7 @@ export const App = () => {
         p.id === selectedPoint?.id ? { ...updatedPoint, id: p.id } : p,
       ),
     );
-    setSelectedPoint(null);
+    setSelectedPoint(undefined);
   };
 
   const handleDeletePoint = (id: string) => {
@@ -44,7 +57,7 @@ export const App = () => {
 
   return (
     <aside className="flex flex-row h-screen w-screen">
-      <div className="shadow-[8px_0_16px_rgba(0,0,0,0.01)] z-1 min-w-md">
+      <div className="shadow-[8px_0_16px_rgba(0,0,0,0.01)] z-2 min-w-md">
         <PointList
           onDelete={handleDeletePoint}
           onEdit={handleEditPoint}
@@ -53,16 +66,21 @@ export const App = () => {
             setIsFormExpanded(true);
           }}
           disableNew={isFormExpanded}
+          loading={loading}
         />
       </div>
       <div
         className={`overflow-hidden transition-all ease-in-out ${isFormExpanded ? "min-w-md " : "min-w-0 w-0"} bg-white`}
       >
-        <PointForm
-          onSubmit={() => {}}
-          point={selectedPoint}
-          onClose={() => setIsFormExpanded(false)}
-        />
+        {isFormExpanded && (
+          <PointForm
+            onSubmit={() => {}}
+            point={selectedPoint}
+            onClose={() => {
+              setIsFormExpanded(false);
+            }}
+          />
+        )}
       </div>
       <div className="w-full h-[100vh]">
         <MapComponent points={points} onMapClick={handleMapClick} />

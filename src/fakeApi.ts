@@ -25,7 +25,7 @@ export const generatePoints = (count: number): Point[] => {
 export const fetchPoints = async (): Promise<Point[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(generatePoints(10));
+      resolve(generatePoints(4));
     }, 1000);
   });
 };
