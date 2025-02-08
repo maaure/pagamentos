@@ -12,6 +12,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <div>
           <label
             className={`text-sm text-gray-700 font-medium block ${error ? "text-red-500  " : ""}`}
+            htmlFor={props.name}
           >
             {label}
           </label>
