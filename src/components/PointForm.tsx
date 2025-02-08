@@ -5,20 +5,30 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface PointFormProps {
-  point?: Point;
+  point?: Omit<Point, "id">;
   onSubmit: (point: Omit<Point, "id">) => void;
   onClose: () => void;
 }
 
-const pointSchema = yup.object({
-  nome: yup
-    .string()
-    .required("O nome é obrigatório")
-    .min(3, "O nome deve ter pelo menos 3 caracteres"),
+type PointFormData = {
+  nome: string;
+  descricao: string;
+  valor: number;
+  localization: string;
+  badges?: string;
+};
+
+const MAX_DESCRIPTION_LENGTH = 100;
+
+const validationSchema = yup.object({
+  nome: yup.string().required("O nome é obrigatório"),
   descricao: yup
     .string()
     .required("A descrição é obrigatória")
-    .max(100, "A descrição não pode exceder 100 caracteres"),
+    .max(
+      MAX_DESCRIPTION_LENGTH,
+      `A descrição não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres`,
+    ),
   valor: yup
     .number()
     .required("O valor é obrigatório")
@@ -32,75 +42,98 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(pointSchema),
-    defaultValues: {},
+    formState: { errors, isValid },
+  } = useForm<PointFormData>({
+    resolver: yupResolver(validationSchema),
+    mode: "onChange",
+    defaultValues: {
+      nome: point?.name,
+      descricao: point?.description,
+      valor: point?.value,
+      badges: point?.badges.join(", "),
+    },
   });
 
-  const submit = (data: any) => {
-    console.log(data);
-    onSubmit(data);
+  const handleFormSubmit = (data: PointFormData) => {
+    /*   onSubmit({
+      ...data,
+      valor: Number(data.valor), // Ensure numeric conversion
+    }); */
   };
 
   return (
-    <aside className="h-screen flex flex-col p-6 gap-6">
+    <aside
+      className="h-screen flex flex-col p-6 gap-6"
+      aria-labelledby="form-header"
+    >
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">
+        <h2 id="form-header" className="text-lg font-semibold">
           {point ? "Editar Pagamento" : "Novo Pagamento"}
         </h2>
         <button
-          className="btn btn-circle text-black"
+          className="btn btn-circle hover:bg-gray-100 transition-colors"
           type="button"
           onClick={onClose}
+          aria-label="Fechar formulário"
         >
-          <i className="fa-solid fa-xmark" />
+          <i className="fa-solid fa-xmark" aria-hidden="true" />
         </button>
       </div>
+
       <form
-        onSubmit={handleSubmit(submit)}
+        onSubmit={handleSubmit(handleFormSubmit)}
         className="flex-1 flex flex-col gap-6"
+        noValidate
       >
         <div className="space-y-4 flex-1">
           <Input
+            id="nome"
             placeholder="Nome do pagamento"
             label="Nome"
             {...register("nome")}
-            errors={errors}
+            error={errors.nome?.message}
           />
 
           <Input
+            id="descricao"
             placeholder="Diga algo sobre esse pagamento"
             label="Descrição"
             {...register("descricao")}
-            errors={errors}
+            error={errors.descricao?.message}
           />
 
           <Input
+            id="valor"
             placeholder="Digite o valor desse pagamento"
             label="Valor"
             type="number"
             step="0.01"
             {...register("valor")}
-            errors={errors}
+            error={errors.valor?.message}
           />
 
           <Input
+            id="localization"
             placeholder="Procure pelo lugar onde este pagamento foi feito"
             label="Localização"
             {...register("localization")}
-            errors={errors}
+            error={errors.localization?.message}
           />
 
           <Input
-            placeholder="Escolha as etiquetas desse pagamento"
+            id="badges"
+            placeholder="Escolha as etiquetas desse pagamento (separadas por vírgula)"
             label="Etiquetas"
             {...register("badges")}
-            errors={errors}
+            error={errors.badges?.message}
           />
         </div>
 
-        <button type="submit" className="w-full btn btn-primary">
+        <button
+          type="submit"
+          className="w-full btn btn-primary"
+          disabled={!isValid}
+        >
           Salvar
         </button>
       </form>
