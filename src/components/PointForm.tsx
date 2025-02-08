@@ -1,117 +1,67 @@
-import { useState, useEffect } from "react";
 import { Point } from "../fakeApi";
+import { Input } from "./Input";
+import { useForm } from "react-hook-form";
 
 interface PointFormProps {
   point?: Point;
   onSubmit: (point: Omit<Point, "id">) => void;
+  onClose: () => void;
 }
 
-export const PointForm = ({ point, onSubmit }: PointFormProps) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [value, setValue] = useState(0);
-  const [lat, setLat] = useState(0);
-  const [lng, setLng] = useState(0);
-  const [badges, setBadges] = useState("");
+export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
+  const { register, handleSubmit } = useForm();
 
-  useEffect(() => {
-    if (point) {
-      setName(point.name);
-      setDescription(point.description);
-      setValue(point.value);
-      setLat(point.lat);
-      setLng(point.lng);
-      setBadges(point.badges.join(", "));
-    } else {
-      setName("");
-      setDescription("");
-      setValue(0);
-      setLat(0);
-      setLng(0);
-      setBadges("");
-    }
-  }, [point]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({
-      name,
-      description,
-      value,
-      lat,
-      lng,
-      badges: badges.split(",").map((b) => b.trim()),
-    });
+  const submit = (data: any) => {
+    console.log(data);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-lg w-100 mx-auto">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Nome:</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-        />
+    <aside className="h-screen flex flex-col p-6 gap-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-lg font-semibold">Novo Pagamento</h2>
+        <button
+          className="btn btn-circle text-black"
+          type="button"
+          onClick={onClose}
+        >
+          <i className="fa-solid fa-xmark" />
+        </button>
       </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Descrição:</label>
-        <input
-          type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-          className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Valor:</label>
-        <input
-          type="number"
-          value={value}
-          onChange={(e) => setValue(Number(e.target.value))}
-          required
-          className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Latitude:</label>
-        <input
-          type="number"
-          value={lat}
-          onChange={(e) => setLat(Number(e.target.value))}
-          required
-          className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Longitude:</label>
-        <input
-          type="number"
-          value={lng}
-          onChange={(e) => setLng(Number(e.target.value))}
-          required
-          className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Badges (separados por vírgula):</label>
-        <input
-          type="text"
-          value={badges}
-          onChange={(e) => setBadges(e.target.value)}
-          required
-          className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-        />
-      </div>
-      <button
-        type="submit"
-        className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700"
+      <form
+        onSubmit={handleSubmit(submit)}
+        className="flex-1 flex flex-col gap-6"
       >
-        Salvar
-      </button>
-    </form>
+        <div className="space-y-4 flex-1">
+          <Input
+            placeholder="Nome do pagamento"
+            label="Nome"
+            {...register("nome")}
+          />
+          <Input
+            placeholder="Diga algo sobre esse pagamento"
+            label="Descrição"
+            {...register("descricao")}
+          />
+          <Input
+            placeholder="Digite o valor desse pagamento"
+            label="Valor"
+            {...register("valor")}
+          />
+          <Input
+            placeholder="Procure pelo lugar onde este pagamento foi feito"
+            label="Localização"
+            {...register("localization")}
+          />
+          <Input
+            placeholder="Escolha as etiquetas desse pagamento"
+            label="Etiquetas"
+            {...register("badges")}
+          />
+        </div>
+        <button type="submit" className="w-full btn btn-primary">
+          Salvar
+        </button>
+      </form>
+    </aside>
   );
 };
