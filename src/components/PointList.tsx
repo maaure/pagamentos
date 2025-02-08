@@ -6,15 +6,18 @@ interface PointListProps {
   points: Point[];
   onEdit: (point: Point) => void;
   onDelete: (id: string) => void;
+  onNew: () => void;
 }
 
-export const PointList = ({ points, onEdit, onDelete }: PointListProps) => {
+export const PointList = ({
+  points,
+  onEdit,
+  onDelete,
+  onNew,
+}: PointListProps) => {
   return (
     <div className="h-screen flex flex-col w-full">
-      <div
-        className="flex flex-col p-6 gap-4 bg-white"
-        style={{ boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.04)" }}
-      >
+      <div className="flex flex-col p-6 gap-4 bg-white shadow-[0_8px_16px_rgba(0,0,0,0.04)]">
         <h2 className="text-lg font-semibold">Pontos Cadastrados</h2>
         <SearchBar
           onSearch={(s) => {
@@ -32,11 +35,8 @@ export const PointList = ({ points, onEdit, onDelete }: PointListProps) => {
           />
         ))}
       </ul>
-      <div
-        className="p-6 bg-white shadow-md-up"
-        style={{ boxShadow: "0px -8px 16px rgba(0, 0, 0, 0.04)" }}
-      >
-        <button className="btn btn-primary" onClick={() => {}}>
+      <div className="p-6 bg-white shadow-[0_-8px_16px_rgba(0,0,0,0.04)]">
+        <button className="btn btn-primary w-full" onClick={onNew}>
           Novo Pagamento
         </button>
       </div>
