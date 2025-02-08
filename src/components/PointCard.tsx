@@ -18,8 +18,12 @@ export const PointCard = ({
       {/* Título, descrição e dropdown */}
       <div className="flex flex-col gap-0">
         <div className="flex justify-between">
-          <h2 className="text-lg font-medium text-gray-900">{name}</h2>
-          <i className="fa-solid fa-ellipsis" />
+          <h2 className="text-lg font-medium self-center text-gray-900">
+            {name}
+          </h2>
+          <button className="btn btn-circle btn-ghost">
+            <i className="fa-solid fa-ellipsis" />
+          </button>
         </div>
         <p className="text-xs text-normal text-gray-500">{description}</p>
       </div>

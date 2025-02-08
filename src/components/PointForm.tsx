@@ -71,12 +71,12 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
           {point ? "Editar Pagamento" : "Novo Pagamento"}
         </h2>
         <button
-          className="btn btn-circle hover:bg-gray-100 transition-colors"
+          className="btn btn-circle btn-ghost"
           type="button"
           onClick={onClose}
           aria-label="Fechar formulário"
         >
-          <i className="fa-solid fa-xmark" aria-hidden="true" />
+          <i className="fa-solid fa-xmark" />
         </button>
       </div>
 
