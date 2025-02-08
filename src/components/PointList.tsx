@@ -1,4 +1,5 @@
 import { Point } from "../fakeApi";
+import { LoadingSpinner } from "./LoadingSpinner";
 import { PointCard } from "./PointCard";
 import { SearchBar } from "./SearchBar";
 
@@ -8,6 +9,7 @@ interface PointListProps {
   onDelete: (id: string) => void;
   onNew: () => void;
   disableNew?: boolean;
+  loading?: boolean;
 }
 
 export const PointList = ({
@@ -16,6 +18,7 @@ export const PointList = ({
   onDelete,
   onNew,
   disableNew,
+  loading,
 }: PointListProps) => {
   return (
     <div className="h-screen flex flex-col w-full">
@@ -27,16 +30,22 @@ export const PointList = ({
           }}
         />
       </div>
-      <ul className="flex flex-col flex-1 overflow-y-auto p-6 gap-4 scrollbar-thin">
-        {points.map((point) => (
-          <PointCard
-            key={point.id}
-            point={point}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
-        ))}
-      </ul>
+      {loading ? (
+        <div className="flex-1 flex items-center justify-center">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <ul className="space-y-4 flex-1 overflow-y-auto p-6 gap-4 scrollbar-thin">
+          {points.map((point) => (
+            <PointCard
+              key={point.id}
+              point={point}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          ))}
+        </ul>
+      )}
       <div className="p-6 bg-white shadow-[0_-8px_16px_rgba(0,0,0,0.04)]">
         <button
           className="btn btn-primary w-full"
