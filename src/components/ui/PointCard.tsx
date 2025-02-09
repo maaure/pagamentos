@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Point } from "../fakeApi";
+import { Point } from "../../fakeApi";
 
 interface PointCardProps {
   point: Point;

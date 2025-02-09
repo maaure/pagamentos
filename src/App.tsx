@@ -11,7 +11,6 @@ export const App = () => {
     undefined,
   );
   const [isFormExpanded, setIsFormExpanded] = useState(false);
-  const [isUpdateFormExpanded, setIsUpdateFormExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filteredPoints, setFilteredPoints] = useState<Point[] | undefined>();
 
@@ -34,8 +33,9 @@ export const App = () => {
   };
 
   const handleEditPoint = (point: Point) => {
-    setIsUpdateFormExpanded(true);
     setSelectedPoint(point);
+    console.log("setting", point);
+    setIsFormExpanded(true);
   };
 
   const handleUpdatePoint = (updatedPoint: Omit<Point, "id">) => {
@@ -57,13 +57,10 @@ export const App = () => {
     }
   };
 
-  const handleCloseUpdateForm = () => {
-    setIsUpdateFormExpanded(false);
-    setSelectedPoint(undefined);
-  };
-
   const handleCloseForm = () => {
+    console.log("close form");
     setIsFormExpanded(false);
+    setSelectedPoint(undefined);
   };
 
   const handleSearch = (search: string) => {
@@ -92,27 +89,17 @@ export const App = () => {
         loading={loading}
       />
       <div
-        className={`overflow-hidden transition-all ease-in-out ${isFormExpanded ? "min-w-md " : "min-w-0 w-0"} bg-white`}
+        className={`overflow-hidden absolute transition-all duration-300 ease-in-out ${
+          isFormExpanded ? "min-w-md w-md" : "min-w-0 w-0"
+        } bg-white z-2000`}
       >
-        {isFormExpanded && (
-          <PointForm onSubmit={() => {}} onClose={handleCloseForm} />
-        )}
+        <PointForm
+          onSubmit={selectedPoint ? handleUpdatePoint : handleAddPoint} // Corrigido para usar a função correta
+          point={selectedPoint}
+          onClose={handleCloseForm}
+        />
       </div>
-
-      <div
-        className={`overflow-hidden transition-all ease-in-out ${isUpdateFormExpanded ? "min-w-md " : "min-w-0 w-0"} bg-white`}
-      >
-        {isUpdateFormExpanded && (
-          <PointForm
-            onSubmit={() => {}}
-            point={selectedPoint}
-            onClose={handleCloseUpdateForm}
-          />
-        )}
-      </div>
-      <div className="w-full h-[100vh]">
-        <MapComponent points={points} onMapClick={handleMapClick} />
-      </div>
+      <MapComponent points={points} onMapClick={handleMapClick} />
     </aside>
   );
 };

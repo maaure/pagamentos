@@ -23,7 +23,7 @@ export const PointList = ({
   loading,
 }: PointListProps) => {
   return (
-    <div className="h-screen flex flex-col border-e-1 border-gray-200 min-w-md">
+    <div className="h-screen flex flex-col w-md min-w-md z-1000 bg-white">
       <div className="flex flex-col p-6 gap-4 bg-white shadow-[0_8px_16px_rgba(0,0,0,0.04)]">
         <h2 className="text-lg font-semibold">Pontos Cadastrados</h2>
         <SearchBar onSearch={onSearch} />

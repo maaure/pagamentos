@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TagInput } from "../fields/TagInput";
+import { useEffect } from "react";
 
 interface PointFormProps {
   point?: Omit<Point, "id">;
@@ -60,9 +61,13 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
     console.log(data);
   };
 
+  useEffect(() => {
+    console.log(point);
+  }, []);
+
   return (
     <aside
-      className="h-screen flex flex-col p-6 gap-6"
+      className="h-screen flex flex-col p-6 gap-6 bg-white"
       aria-labelledby="form-header"
     >
       <div className="flex justify-between items-center">
