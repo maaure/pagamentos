@@ -7,6 +7,7 @@ interface PointListProps {
   points: Point[];
   onEdit: (point: Point) => void;
   onDelete: (id: string) => void;
+  onSearch: (search: string) => void;
   onNew: () => void;
   disableNew?: boolean;
   loading?: boolean;
@@ -17,18 +18,15 @@ export const PointList = ({
   onEdit,
   onDelete,
   onNew,
+  onSearch,
   disableNew,
   loading,
 }: PointListProps) => {
   return (
-    <div className="h-screen flex flex-col w-full">
+    <div className="h-screen flex flex-col border-e-1 border-gray-200 min-w-md">
       <div className="flex flex-col p-6 gap-4 bg-white shadow-[0_8px_16px_rgba(0,0,0,0.04)]">
         <h2 className="text-lg font-semibold">Pontos Cadastrados</h2>
-        <SearchBar
-          onSearch={(s) => {
-            console.log(s);
-          }}
-        />
+        <SearchBar onSearch={onSearch} />
       </div>
       {loading ? (
         <div className="flex-1 flex items-center justify-center">

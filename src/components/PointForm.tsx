@@ -55,10 +55,7 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
   });
 
   const handleFormSubmit = (data: PointFormData) => {
-    /*   onSubmit({
-      ...data,
-      valor: Number(data.valor), // Ensure numeric conversion
-    }); */
+    console.log(data);
   };
 
   return (
@@ -135,7 +132,7 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
           className="w-full btn btn-secondary"
           disabled={!isValid}
         >
-          Salvar
+          {point ? "Salvar alterações" : "Adicionar pagamento"}
         </button>
       </form>
     </aside>

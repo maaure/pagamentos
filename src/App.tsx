@@ -11,7 +11,9 @@ export const App = () => {
     undefined,
   );
   const [isFormExpanded, setIsFormExpanded] = useState(false);
+  const [isUpdateFormExpanded, setIsUpdateFormExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [filteredPoints, setFilteredPoints] = useState<Point[] | undefined>();
 
   useEffect(() => {
     fetchData();
@@ -32,7 +34,7 @@ export const App = () => {
   };
 
   const handleEditPoint = (point: Point) => {
-    setIsFormExpanded(true);
+    setIsUpdateFormExpanded(true);
     setSelectedPoint(point);
   };
 
@@ -55,30 +57,56 @@ export const App = () => {
     }
   };
 
+  const handleCloseUpdateForm = () => {
+    setIsUpdateFormExpanded(false);
+    setSelectedPoint(undefined);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormExpanded(false);
+  };
+
+  const handleSearch = (search: string) => {
+    if (search && search.length > 0) {
+      setFilteredPoints(
+        points.filter((p) =>
+          p.name.toLowerCase().includes(search.toLowerCase()),
+        ),
+      );
+    } else {
+      setFilteredPoints(undefined);
+    }
+  };
+
   return (
     <aside className="flex flex-row h-screen w-screen">
-      <div className="shadow-[8px_0_16px_rgba(0,0,0,0.01)] z-2 min-w-md">
-        <PointList
-          onDelete={handleDeletePoint}
-          onEdit={handleEditPoint}
-          points={points}
-          onNew={() => {
-            setIsFormExpanded(true);
-          }}
-          disableNew={isFormExpanded}
-          loading={loading}
-        />
-      </div>
+      <PointList
+        onDelete={handleDeletePoint}
+        onEdit={handleEditPoint}
+        onSearch={handleSearch}
+        points={filteredPoints ?? points}
+        onNew={() => {
+          setIsFormExpanded(true);
+        }}
+        disableNew={isFormExpanded}
+        loading={loading}
+      />
       <div
         className={`overflow-hidden transition-all ease-in-out ${isFormExpanded ? "min-w-md " : "min-w-0 w-0"} bg-white`}
       >
         {isFormExpanded && (
+          <PointForm onSubmit={() => {}} onClose={handleCloseForm} />
+        )}
+      </div>
+
+      <div
+        className={`overflow-hidden transition-all ease-in-out ${isUpdateFormExpanded ? "min-w-md " : "min-w-0 w-0"} bg-white`}
+      >
+        {isUpdateFormExpanded && (
           <PointForm
             onSubmit={() => {}}
             point={selectedPoint}
-            onClose={() => {
-              setIsFormExpanded(false);
-            }}
+            onClose={handleCloseUpdateForm}
           />
         )}
       </div>

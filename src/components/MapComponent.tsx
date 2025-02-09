@@ -38,7 +38,7 @@ export const MapComponent = ({ points, onMapClick }: MapComponentProps) => {
     <MapContainer
       center={[-15.77972, -47.92972]}
       zoom={13}
-      style={{ height: "100%", width: "100%" }}
+      className="w-full h-full z-1"
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
