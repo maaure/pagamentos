@@ -3,6 +3,7 @@ import { Input } from "./Input";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { TagInput } from "./TagInput";
 
 interface PointFormProps {
   point?: Omit<Point, "id">;
@@ -43,6 +44,7 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    getValues,
   } = useForm<PointFormData>({
     resolver: yupResolver(validationSchema),
     mode: "onChange",
@@ -118,12 +120,11 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
             error={errors.localization?.message}
           />
 
-          <Input
-            id="badges"
-            placeholder="Escolha as etiquetas desse pagamento (separadas por vírgula)"
-            label="Etiquetas"
+          <TagInput
+            placeholder="Insira as etiquetas desse pagamento"
+            label="Categorias"
+            value={getValues("badges")}
             {...register("badges")}
-            error={errors.badges?.message}
           />
         </div>
 
