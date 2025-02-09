@@ -13,6 +13,7 @@ export const App = () => {
   const [isFormExpanded, setIsFormExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filteredPoints, setFilteredPoints] = useState<Point[] | undefined>();
+  const [shouldRenderForm, setShouldRenderForm] = useState(false); // Novo estado
 
   useEffect(() => {
     fetchData();
@@ -34,17 +35,24 @@ export const App = () => {
 
   const handleEditPoint = (point: Point) => {
     setSelectedPoint(point);
-    console.log("setting", point);
-    setIsFormExpanded(true);
+    handleOpenForm();
   };
 
   const handleUpdatePoint = (updatedPoint: Omit<Point, "id">) => {
-    setPoints(
-      points.map((p) =>
-        p.id === selectedPoint?.id ? { ...updatedPoint, id: p.id } : p,
-      ),
-    );
-    setSelectedPoint(undefined);
+    if (!selectedPoint || !updatedPoint) return;
+
+    MapService.updatePoint(selectedPoint?.id, updatedPoint)
+      .then(() => {
+        setPoints(
+          points.map((p) =>
+            p.id === selectedPoint?.id ? { ...updatedPoint, id: p.id } : p,
+          ),
+        );
+      })
+      .finally(() => {
+        handleCloseForm();
+        setSelectedPoint(undefined);
+      });
   };
 
   const handleDeletePoint = (id: string) => {
@@ -57,10 +65,17 @@ export const App = () => {
     }
   };
 
+  const handleOpenForm = () => {
+    setIsFormExpanded(true);
+    setShouldRenderForm(true);
+  };
+
   const handleCloseForm = () => {
-    console.log("close form");
     setIsFormExpanded(false);
-    setSelectedPoint(undefined);
+    setTimeout(() => {
+      setShouldRenderForm(false);
+      setSelectedPoint(undefined);
+    }, 300);
   };
 
   const handleSearch = (search: string) => {
@@ -82,22 +97,22 @@ export const App = () => {
         onEdit={handleEditPoint}
         onSearch={handleSearch}
         points={filteredPoints ?? points}
-        onNew={() => {
-          setIsFormExpanded(true);
-        }}
+        onNew={handleOpenForm}
         disableNew={isFormExpanded}
         loading={loading}
       />
       <div
         className={`overflow-hidden absolute transition-all duration-300 ease-in-out ${
-          isFormExpanded ? "min-w-md w-md" : "min-w-0 w-0"
+          isFormExpanded ? "w-md min-w-md" : "w-0 min-w-0"
         } bg-white z-2000`}
       >
-        <PointForm
-          onSubmit={selectedPoint ? handleUpdatePoint : handleAddPoint} // Corrigido para usar a função correta
-          point={selectedPoint}
-          onClose={handleCloseForm}
-        />
+        {shouldRenderForm && (
+          <PointForm
+            onSubmit={selectedPoint ? handleUpdatePoint : handleAddPoint}
+            point={selectedPoint}
+            onClose={handleCloseForm}
+          />
+        )}
       </div>
       <MapComponent points={points} onMapClick={handleMapClick} />
     </aside>

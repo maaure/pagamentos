@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TagInput } from "../fields/TagInput";
-import { useEffect } from "react";
 
 interface PointFormProps {
   point?: Omit<Point, "id">;
@@ -16,7 +15,9 @@ type PointFormData = {
   nome: string;
   descricao: string;
   valor: number;
-  localization: string;
+  // localization: string;
+  lat: number;
+  lng: number;
   badges?: string;
 };
 
@@ -36,34 +37,41 @@ const validationSchema = yup.object({
     .required("O valor é obrigatório")
     .typeError("O valor deve ser numérico")
     .positive("O valor deve ser positivo"),
-  localization: yup.string().required("A localização é obrigatória"),
+  // localization: yup.string().required("A localização é obrigatória"),
+  lat: yup.number().required("A latitude é obrigatória"),
+  lng: yup.number().required("A longitude é obrigatória"),
   badges: yup.string().optional(),
 });
-
 export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     getValues,
+    reset,
   } = useForm<PointFormData>({
     resolver: yupResolver(validationSchema),
     mode: "onChange",
     defaultValues: {
-      nome: point?.name,
-      descricao: point?.description,
-      valor: point?.value,
-      badges: point?.badges.join(", "),
+      nome: point?.name || "",
+      descricao: point?.description || "",
+      valor: point?.value || 0,
+      lat: point?.lat || 0,
+      lng: point?.lng || 0,
+      badges: point?.badges?.join(", ") || "",
     },
   });
 
   const handleFormSubmit = (data: PointFormData) => {
-    console.log(data);
+    onSubmit({
+      name: data.nome,
+      description: data.descricao,
+      value: data.valor,
+      lat: data.lat,
+      lng: data.lng,
+      badges: data.badges ? data.badges.split(", ") : [],
+    });
   };
-
-  useEffect(() => {
-    console.log(point);
-  }, []);
 
   return (
     <aside
@@ -91,7 +99,6 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
       >
         <div className="space-y-4 flex-1">
           <Input
-            id="nome"
             placeholder="Nome do pagamento"
             label="Nome"
             {...register("nome")}
@@ -99,7 +106,6 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
           />
 
           <Input
-            id="descricao"
             placeholder="Diga algo sobre esse pagamento"
             label="Descrição"
             {...register("descricao")}
@@ -107,7 +113,6 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
           />
 
           <Input
-            id="valor"
             placeholder="Digite o valor desse pagamento"
             label="Valor"
             type="number"
@@ -118,11 +123,19 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
           />
 
           <Input
-            id="localization"
-            placeholder="Procure pelo lugar onde este pagamento foi feito"
-            label="Localização"
-            {...register("localization")}
-            error={errors.localization?.message}
+            placeholder="Insira a latitude"
+            type="number"
+            label="Latitude"
+            {...register("lat")}
+            error={errors.lat?.message}
+          />
+
+          <Input
+            placeholder="Insira a longitude"
+            type="number"
+            label="Longitude"
+            {...register("lng")}
+            error={errors.lng?.message}
           />
 
           <TagInput

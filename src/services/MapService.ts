@@ -1,8 +1,20 @@
-import { fetchPoints, Point } from "../fakeApi";
+import fakeApi, { Point } from "../fakeApi";
 
 class MapService {
   async getAllPoints(): Promise<Point[]> {
-    return fetchPoints();
+    console.log(fakeApi.get().then((data) => console.log(data)));
+    return fakeApi.get();
+  }
+  async updatePoint(id: string, point: Omit<Point, "id">): Promise<Point> {
+    return fakeApi.put(id, point);
+  }
+
+  async createPoint(point: Omit<Point, "id">): Promise<Point> {
+    return fakeApi.post(point);
+  }
+
+  async deletePoint(id: string): Promise<void> {
+    return fakeApi.delete(id);
   }
 }
 
