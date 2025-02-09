@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { MapComponent } from "./components/MapComponent";
-import { PointForm } from "./components/PointForm";
-import { PointList } from "./components/PointList";
+import { MapComponent } from "./components/ui/MapComponent";
+import { PointForm } from "./components/forms/PointForm";
+import { PointList } from "./components/ui/PointList";
 import { Point } from "./fakeApi";
 import MapService from "./services/MapService";
 

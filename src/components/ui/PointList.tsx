@@ -1,7 +1,7 @@
-import { Point } from "../fakeApi";
+import { Point } from "../../fakeApi";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { PointCard } from "./PointCard";
-import { SearchBar } from "./SearchBar";
+import { SearchBar } from "../fields/SearchBar";
 
 interface PointListProps {
   points: Point[];

@@ -1,9 +1,9 @@
-import { Point } from "../fakeApi";
-import { Input } from "./Input";
+import { Point } from "../../fakeApi";
+import { Input } from "../fields/Input";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { TagInput } from "./TagInput";
+import { TagInput } from "../fields/TagInput";
 
 interface PointFormProps {
   point?: Omit<Point, "id">;
