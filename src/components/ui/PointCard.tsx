@@ -3,8 +3,8 @@ import { Point } from "../../fakeApi";
 
 interface PointCardProps {
   point: Point;
-  onEdit: (point: Point) => void;
-  onDelete: (id: string) => void;
+  onEdit?: (point: Point) => void;
+  onDelete?: (id: string) => void;
 }
 
 export const PointCard = ({
@@ -15,11 +15,11 @@ export const PointCard = ({
   const { name, description, value, badges } = point;
 
   const handleDelete = () => {
-    onDelete(point.id);
+    onDelete?.(point.id);
   };
 
   const handleEdit = () => {
-    onEdit(point);
+    onEdit?.(point);
   };
 
   return (
@@ -30,7 +30,9 @@ export const PointCard = ({
           <h2 className="text-lg font-medium self-center text-gray-900">
             {name}
           </h2>
-          <Dropdown onDelete={handleDelete} onEdit={handleEdit} />
+          {(onEdit || onDelete) && (
+            <Dropdown onDelete={handleDelete} onEdit={handleEdit} />
+          )}
         </div>
         <p className="text-xs text-normal text-gray-500">{description}</p>
       </div>
@@ -63,27 +65,32 @@ const Dropdown = ({ onEdit, onDelete }: DropdownProps) => {
       </button>
 
       <div
-        className={`absolute bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44  transistion-all ease-in-out duration-100  ${open ? "max-h-96" : "max-h-0"} overflow-hidden`}
+        className={`absolute bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44  transistion-all ease-in-out duration-100 ${open ? "max-h-96" : "max-h-0"} overflow-hidden`}
       >
         <ul className="text-sm text-gray-700">
-          <li>
-            <a
-              className="block px-4 py-4 hover:bg-gray-100 cursor-pointer"
-              onClick={onEdit}
-            >
-              <i className="fa-solid fa-pencil pe-2" />
-              Editar
-            </a>
-          </li>
-          <li>
-            <a
-              className="block px-4 py-4 text-red-400 hover:bg-gray-100 cursor-pointer"
-              onClick={onDelete}
-            >
-              <i className="fa-solid fa-trash pe-2" />
-              Excluir
-            </a>
-          </li>
+          {onEdit && (
+            <li>
+              <a
+                className="block px-4 py-4 hover:bg-gray-100 cursor-pointer"
+                onClick={onEdit}
+              >
+                <i className="fa-solid fa-pencil pe-2" />
+                Editar
+              </a>
+            </li>
+          )}
+
+          {onDelete && (
+            <li>
+              <a
+                className="block px-4 py-4 text-red-400 hover:bg-gray-100 cursor-pointer"
+                onClick={onDelete}
+              >
+                <i className="fa-solid fa-trash pe-2" />
+                Excluir
+              </a>
+            </li>
+          )}
         </ul>
       </div>
     </div>
