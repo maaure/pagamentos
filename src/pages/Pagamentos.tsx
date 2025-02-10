@@ -6,6 +6,11 @@ import { Point } from "../fakeApi";
 import MapService from "../services/MapService";
 import { useFeedback } from "../components/hooks/useFeedback";
 
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
 export const Pagamentos = () => {
   const [points, setPoints] = useState<Point[]>([]);
   const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(
@@ -17,8 +22,9 @@ export const Pagamentos = () => {
   const [shouldRenderForm, setShouldRenderForm] = useState(false);
   const { pushFeedback } = useFeedback();
   const [addingPoint, setAddingPoint] = useState(false);
-  const [coordinates, setCoordinates] = useState<
-    { lat: number; lng: number } | undefined
+  const [coordinates, setCoordinates] = useState<Coordinates | undefined>();
+  const [editCoordinates, setEditCoordinates] = useState<
+    Coordinates | undefined
   >();
   useEffect(() => {
     fetchData();
@@ -49,6 +55,7 @@ export const Pagamentos = () => {
 
   const handleEditPoint = (point: Point) => {
     setSelectedPoint(point);
+    setEditCoordinates({ lat: point.lat, lng: point.lng });
     handleOpenForm();
   };
 
@@ -149,6 +156,7 @@ export const Pagamentos = () => {
         onMapClick={handleMapClick}
         addingPoint={addingPoint}
         onCenterChanged={handleMoveMarker}
+        updateCoordinates={editCoordinates}
       />
     </aside>
   );

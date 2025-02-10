@@ -41,7 +41,7 @@ export const FeedbackBar = () => {
   return (
     <div
       onClick={() => setShow(false)}
-      className={`h-1 ${colors?.bg} ${colors?.shadow} shadow-md relative transition-all shadow-emerald-500 ease-out ${show ? "duration-0" : "duration-5000"} ${show ? "w-[100%] opacity-100" : "w-[0%] opacity-0"}`}
+      className={`h-1 ${colors?.bg} ${colors?.shadow} shadow-md relative transition-all  ease-out ${show ? "duration-0" : "duration-5000"} ${show ? "w-[100%] opacity-100" : "w-[0%] opacity-0"}`}
     />
   );
 };

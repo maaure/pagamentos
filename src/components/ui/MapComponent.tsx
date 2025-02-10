@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -26,6 +26,8 @@ interface MapComponentProps {
   onMapClick?: (lat: number, lng: number) => void;
   addingPoint?: boolean;
   onCenterChanged?: (lat: number, lng: number) => void;
+  coordinates?: { lat: number; lng: number };
+  updateCoordinates?: { lat: number; lng: number };
 }
 
 function MapClickHandler({
@@ -62,10 +64,18 @@ function LocateUser() {
 
 function UpdateCenterCoordinates({
   onCenterChanged,
+  coordinates,
 }: {
   onCenterChanged: (lat: number, lng: number) => void;
+  coordinates?: { lat: number; lng: number };
 }) {
   const map = useMap();
+
+  useEffect(() => {
+    const center = map.getCenter();
+    onCenterChanged(center.lat, center.lng);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const updateCenter = () => {
@@ -74,9 +84,32 @@ function UpdateCenterCoordinates({
     };
 
     map.on("drag", updateCenter);
+
+    return () => {
+      map.off("drag", updateCenter);
+    };
   }, [map, onCenterChanged]);
 
-  return null;
+  useEffect(() => {
+    if (coordinates) {
+      map.flyTo([coordinates.lat, coordinates.lng], 13);
+    }
+  }, [coordinates, map]);
+
+  return (
+    <div
+      className="absolute top-1/2 left-1/2 pointer-events-none"
+      style={{
+        transform: "translate(-50%, -100%)",
+      }}
+    >
+      <img
+        src="https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
+        alt="Marcador central"
+        className="w-full h-full"
+      />
+    </div>
+  );
 }
 
 export const MapComponent = ({
@@ -84,6 +117,7 @@ export const MapComponent = ({
   onMapClick,
   addingPoint = false,
   onCenterChanged = () => {},
+  updateCoordinates,
 }: MapComponentProps) => {
   return (
     <div className="relative w-full h-full">
@@ -122,7 +156,10 @@ export const MapComponent = ({
         ))}
 
         {addingPoint && (
-          <UpdateCenterCoordinates onCenterChanged={onCenterChanged} />
+          <UpdateCenterCoordinates
+            onCenterChanged={onCenterChanged}
+            coordinates={updateCoordinates}
+          />
         )}
       </MapContainer>
 

@@ -23,6 +23,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               </p>
             )}
             <input
+              id={props.name}
               className={`input w-full ${error && "error"} ${currency && "indent-5"}`}
               {...props}
               ref={ref}

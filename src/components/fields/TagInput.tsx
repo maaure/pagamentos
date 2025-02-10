@@ -5,8 +5,6 @@ interface TagInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   defaultValue?: string;
 }
 
-/* Known Issue: Click on label dont focus the field */
-
 export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
   ({ label, placeholder, onChange, value, ...props }, ref) => {
     const [inputValue, setInputValue] = useState<string>("");
@@ -58,6 +56,7 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
                 ref={ref}
               />
               <input
+                id={props.name}
                 type="text"
                 value={inputValue}
                 onChange={handleInputChange}
