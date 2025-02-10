@@ -25,6 +25,7 @@ interface MapComponentProps {
   points: Point[];
   onMapClick?: (lat: number, lng: number) => void;
   addingPoint?: boolean;
+  updatingPoint?: boolean;
   onCenterChanged?: (lat: number, lng: number) => void;
   coordinates?: { lat: number; lng: number };
   updateCoordinates?: { lat: number; lng: number };
@@ -65,14 +66,16 @@ function LocateUser() {
 function UpdateCenterCoordinates({
   onCenterChanged,
   coordinates,
+  updatingPoint,
 }: {
   onCenterChanged: (lat: number, lng: number) => void;
   coordinates?: { lat: number; lng: number };
+  updatingPoint: boolean;
 }) {
   const map = useMap();
 
   useEffect(() => {
-    if (coordinates) {
+    if (coordinates && updatingPoint) {
       map.flyTo([coordinates.lat, coordinates.lng], 14);
     }
     const center = map.getCenter();
@@ -95,12 +98,6 @@ function UpdateCenterCoordinates({
     };
   }, [map, onCenterChanged]);
 
-  useEffect(() => {
-    if (coordinates) {
-      map.flyTo([coordinates.lat, coordinates.lng], 18);
-    }
-  }, [coordinates, map]);
-
   return (
     <div
       className="absolute top-1/2 left-1/2 pointer-events-none"
@@ -121,6 +118,7 @@ export const MapComponent = ({
   points,
   onMapClick,
   addingPoint = false,
+  updatingPoint = false,
   onCenterChanged = () => {},
   updateCoordinates,
 }: MapComponentProps) => {
@@ -164,6 +162,7 @@ export const MapComponent = ({
           <UpdateCenterCoordinates
             onCenterChanged={onCenterChanged}
             coordinates={updateCoordinates}
+            updatingPoint={updatingPoint}
           />
         )}
       </MapContainer>

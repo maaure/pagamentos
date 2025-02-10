@@ -22,6 +22,7 @@ export const Pagamentos = () => {
   const [shouldRenderForm, setShouldRenderForm] = useState(false);
   const { pushFeedback } = useFeedback();
   const [addingPoint, setAddingPoint] = useState(false);
+  const [updatingPoint, setUpdatingPoint] = useState(false);
   const [coordinates, setCoordinates] = useState<Coordinates | undefined>();
   const [editCoordinates, setEditCoordinates] = useState<
     Coordinates | undefined
@@ -44,6 +45,7 @@ export const Pagamentos = () => {
       .then((newPoint) => {
         pushFeedback("success");
         setPoints((prev) => {
+          console.log([...prev, newPoint]);
           return [...prev, newPoint];
         });
       })
@@ -57,6 +59,7 @@ export const Pagamentos = () => {
     setSelectedPoint(point);
     setEditCoordinates({ lat: point.lat, lng: point.lng });
     handleOpenForm();
+    setUpdatingPoint(true);
   };
 
   const handleUpdatePoint = (point: Omit<Point, "id">) => {
@@ -102,6 +105,8 @@ export const Pagamentos = () => {
 
   const handleCloseForm = () => {
     setIsFormExpanded(false);
+    setAddingPoint(false);
+    setUpdatingPoint(false);
     setAddingPoint(false);
     setTimeout(() => {
       setShouldRenderForm(false);
@@ -155,6 +160,7 @@ export const Pagamentos = () => {
         points={points}
         onMapClick={handleMapClick}
         addingPoint={addingPoint}
+        updatingPoint={updatingPoint}
         onCenterChanged={handleMoveMarker}
         updateCoordinates={editCoordinates}
       />
