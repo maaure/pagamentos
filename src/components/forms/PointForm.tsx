@@ -75,13 +75,14 @@ export const PointForm = ({
   }, [centerCoordinates, setValue]);
 
   const handleFormSubmit = (data: PointFormData) => {
+    console.log(data);
     onSubmit({
       name: data.nome,
       description: data.descricao,
       value: data.valor,
       lat: data.lat,
       lng: data.lng,
-      badges: data.badges ? data.badges.split(", ") : [],
+      badges: data.badges ? data.badges.split(",") : [],
     });
   };
 

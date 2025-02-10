@@ -41,11 +41,11 @@ export const Pagamentos = () => {
   };
 
   const handleAddPoint = (point: Omit<Point, "id">) => {
+    console.log(point);
     MapService.createPoint(point)
       .then((newPoint) => {
         pushFeedback("success");
         setPoints((prev) => {
-          console.log([...prev, newPoint]);
           return [...prev, newPoint];
         });
       })

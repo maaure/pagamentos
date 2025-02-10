@@ -40,7 +40,11 @@ class FakeApi {
   }
 
   async put(id: string, point: Omit<Point, "id">): Promise<Point> {
-    this.points = this.points.map((p) => (p.id === id ? { ...point, id } : p));
+    const updatedPoint = {
+      ...point,
+      id: faker.string.uuid(),
+    };
+    this.points = this.points.map((p) => (p.id === id ? updatedPoint : p));
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(structuredClone({ ...point, id }));
@@ -49,7 +53,10 @@ class FakeApi {
   }
 
   async post(point: Omit<Point, "id">): Promise<Point> {
-    const newPoint = { ...point, id: faker.string.uuid() };
+    const newPoint = {
+      ...point,
+      id: faker.string.uuid(),
+    };
     this.points.push(newPoint);
     return new Promise((resolve) => {
       setTimeout(() => {
