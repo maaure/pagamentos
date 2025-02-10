@@ -72,8 +72,13 @@ function UpdateCenterCoordinates({
   const map = useMap();
 
   useEffect(() => {
+    if (coordinates) {
+      map.flyTo([coordinates.lat, coordinates.lng], 14);
+    }
     const center = map.getCenter();
     onCenterChanged(center.lat, center.lng);
+    // Desativada a regra abaixo porque queremos que este efeito rode apenas uma vez na montagem do componente.
+    // Adicionar `map` ou `onCenterChanged` como dependências faria com que o efeito rodasse mais vezes do que o necessário.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -92,7 +97,7 @@ function UpdateCenterCoordinates({
 
   useEffect(() => {
     if (coordinates) {
-      map.flyTo([coordinates.lat, coordinates.lng], 13);
+      map.flyTo([coordinates.lat, coordinates.lng], 18);
     }
   }, [coordinates, map]);
 
@@ -170,11 +175,7 @@ export const MapComponent = ({
             transform: "translate(-50%, -100%)",
           }}
         >
-          <img
-            src="https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
-            alt="Marcador central"
-            className="w-full h-full"
-          />
+          <i className="text-2xl fa-solid fa-map-pin"></i>
         </div>
       )}
     </div>
