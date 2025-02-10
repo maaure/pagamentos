@@ -34,7 +34,7 @@ class FakeApi {
   async get(): Promise<Point[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(this.points);
+        resolve(structuredClone(this.points));
       }, 1000);
     });
   }
@@ -43,7 +43,7 @@ class FakeApi {
     this.points = this.points.map((p) => (p.id === id ? { ...point, id } : p));
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve({ ...point, id });
+        resolve(structuredClone({ ...point, id }));
       }, 1000);
     });
   }
@@ -53,7 +53,7 @@ class FakeApi {
     this.points.push(newPoint);
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(newPoint);
+        resolve(structuredClone(newPoint));
       }, 1000);
     });
   }

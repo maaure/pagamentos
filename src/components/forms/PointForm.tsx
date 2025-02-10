@@ -48,16 +48,15 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
     handleSubmit,
     formState: { errors, isValid },
     getValues,
-    reset,
   } = useForm<PointFormData>({
     resolver: yupResolver(validationSchema),
     mode: "onChange",
     defaultValues: {
       nome: point?.name || "",
       descricao: point?.description || "",
-      valor: point?.value || 0,
-      lat: point?.lat || 0,
-      lng: point?.lng || 0,
+      valor: point?.value || undefined,
+      lat: point?.lat || undefined,
+      lng: point?.lng || undefined,
       badges: point?.badges?.join(", ") || "",
     },
   });

@@ -2,6 +2,7 @@ import { Point } from "../../fakeApi";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { PointCard } from "./PointCard";
 import { SearchBar } from "../fields/SearchBar";
+import { FeedbackBar } from "./FeedbackBar";
 
 interface PointListProps {
   points: Point[];
@@ -28,6 +29,7 @@ export const PointList = ({
         <h2 className="text-lg font-semibold">Pontos Cadastrados</h2>
         <SearchBar onSearch={onSearch} />
       </div>
+      <FeedbackBar />
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
           <LoadingSpinner />
