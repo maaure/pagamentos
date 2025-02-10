@@ -4,7 +4,6 @@ import { useFeedback } from "../hooks/useFeedback";
 export const FeedbackBar = () => {
   const { feedbacks } = useFeedback();
   const [show, setShow] = useState(true);
-  const [shouldRender, setShouldRender] = useState(false);
 
   const colors = {
     success: {
@@ -28,32 +27,21 @@ export const FeedbackBar = () => {
   useEffect(() => {
     if (feedbacks.length === 0) return;
 
-    console.log(feedbacks);
-    setShouldRender(true);
     setShow(true);
 
     const hideTimeout = setTimeout(() => {
       setShow(false);
-    }, 50);
-
-    const unmountTimeout = setTimeout(() => {
-      setShouldRender(false);
-    }, 1200);
+    }, 10);
 
     return () => {
       clearTimeout(hideTimeout);
-      clearTimeout(unmountTimeout);
     };
   }, [feedbacks]);
-
-  if (!shouldRender) return null;
 
   return (
     <div
       onClick={() => setShow(false)}
-      className={`h-1 ${colors?.bg} ${colors?.shadow} shadow relative transition-all ease-out duration-1200 ${
-        show ? "w-[100%]" : "w-[0%]"
-      }`}
+      className={`h-1 ${colors?.bg} ${colors?.shadow} shadow-md relative transition-all shadow-emerald-500 ease-out ${show ? "duration-0" : "duration-5000"} ${show ? "w-[100%] opacity-100" : "w-[0%] opacity-0"}`}
     />
   );
 };

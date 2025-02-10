@@ -49,8 +49,6 @@ function LocateUser() {
       (position) => {
         const { latitude, longitude } = position.coords;
         map.setView([latitude, longitude], 13);
-
-        console.log("Localização obtida com sucesso:", latitude, longitude);
       },
       (error) => {
         console.error("Erro ao obter a localização:", error);

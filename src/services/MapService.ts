@@ -2,7 +2,6 @@ import fakeApi, { Point } from "../fakeApi";
 
 class MapService {
   async getAllPoints(): Promise<Point[]> {
-    console.log(fakeApi.get().then((data) => console.log(data)));
     return fakeApi.get();
   }
   async updatePoint(id: string, point: Omit<Point, "id">): Promise<Point> {

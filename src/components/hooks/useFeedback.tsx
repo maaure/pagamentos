@@ -1,13 +1,10 @@
 import { useContext } from "react";
-import {
-  FeedbackContext,
-  FeedbackContextType,
-} from "../context/FeedbackContext";
+import { FeedbackContext } from "../context/FeedbackContext";
 
-export const useFeedback = (): FeedbackContextType => {
+export const useFeedback = () => {
   const context = useContext(FeedbackContext);
-  if (context === undefined) {
-    throw new Error("useFeedback must be used within a ReloadProvider");
+  if (!context) {
+    throw new Error("useFeedback deve ser usado dentro de um FeedbackProvider");
   }
   return context;
 };

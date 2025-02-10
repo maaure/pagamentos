@@ -120,6 +120,15 @@ export const Pagamentos = () => {
         disableNew={isFormExpanded}
         loading={loading}
       />
+
+      <button
+        className="btn btn-primary"
+        onClick={() => {
+          pushFeedback("success");
+        }}
+      >
+        asdasasd
+      </button>
       <div
         className={`overflow-hidden absolute transition-all duration-300 ease-in-out ${
           isFormExpanded ? "w-md min-w-md" : "w-0 min-w-0"

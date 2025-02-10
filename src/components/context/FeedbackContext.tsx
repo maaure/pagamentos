@@ -1,3 +1,4 @@
+// FeedbackContext.tsx
 import { createContext } from "react";
 
 export type FeedbackType = "success" | "warning" | "info" | "error";
@@ -7,7 +8,6 @@ export interface FeedbackContextType {
   feedbacks: string[];
 }
 
-export const FeedbackContext = createContext<FeedbackContextType>({
-  pushFeedback: () => {},
-  feedbacks: [],
-});
+export const FeedbackContext = createContext<FeedbackContextType | undefined>(
+  undefined,
+);
