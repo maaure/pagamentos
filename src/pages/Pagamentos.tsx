@@ -16,7 +16,10 @@ export const Pagamentos = () => {
   const [filteredPoints, setFilteredPoints] = useState<Point[] | undefined>();
   const [shouldRenderForm, setShouldRenderForm] = useState(false);
   const { pushFeedback } = useFeedback();
-
+  const [addingPoint, setAddingPoint] = useState(false);
+  const [coordinates, setCoordinates] = useState<
+    { lat: number; lng: number } | undefined
+  >();
   useEffect(() => {
     fetchData();
   }, []);
@@ -87,10 +90,12 @@ export const Pagamentos = () => {
   const handleOpenForm = () => {
     setIsFormExpanded(true);
     setShouldRenderForm(true);
+    setAddingPoint(true);
   };
 
   const handleCloseForm = () => {
     setIsFormExpanded(false);
+    setAddingPoint(false);
     setTimeout(() => {
       setShouldRenderForm(false);
       setSelectedPoint(undefined);
@@ -109,6 +114,10 @@ export const Pagamentos = () => {
     }
   };
 
+  const handleMoveMarker = (lat: number, lng: number) => {
+    setCoordinates({ lat, lng });
+  };
+
   return (
     <aside className="flex flex-row h-screen w-screen">
       <PointList
@@ -121,14 +130,6 @@ export const Pagamentos = () => {
         loading={loading}
       />
 
-      <button
-        className="btn btn-primary"
-        onClick={() => {
-          pushFeedback("success");
-        }}
-      >
-        asdasasd
-      </button>
       <div
         className={`overflow-hidden absolute transition-all duration-300 ease-in-out ${
           isFormExpanded ? "w-md min-w-md" : "w-0 min-w-0"
@@ -138,11 +139,17 @@ export const Pagamentos = () => {
           <PointForm
             onSubmit={selectedPoint ? handleUpdatePoint : handleAddPoint}
             point={selectedPoint}
+            centerCoordinates={coordinates}
             onClose={handleCloseForm}
           />
         )}
       </div>
-      <MapComponent points={points} onMapClick={handleMapClick} />
+      <MapComponent
+        points={points}
+        onMapClick={handleMapClick}
+        addingPoint={addingPoint}
+        onCenterChanged={handleMoveMarker}
+      />
     </aside>
   );
 };

@@ -4,9 +4,11 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TagInput } from "../fields/TagInput";
+import { useEffect } from "react";
 
 interface PointFormProps {
   point?: Omit<Point, "id">;
+  centerCoordinates?: { lat: number; lng: number };
   onSubmit: (point: Omit<Point, "id">) => void;
   onClose: () => void;
 }
@@ -15,7 +17,6 @@ type PointFormData = {
   nome: string;
   descricao: string;
   valor: number;
-  // localization: string;
   lat: number;
   lng: number;
   badges?: string;
@@ -42,24 +43,36 @@ const validationSchema = yup.object({
   lng: yup.number().required("A longitude é obrigatória"),
   badges: yup.string().optional(),
 });
-export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
+export const PointForm = ({
+  point,
+  onSubmit,
+  onClose,
+  centerCoordinates,
+}: PointFormProps) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
     getValues,
   } = useForm<PointFormData>({
     resolver: yupResolver(validationSchema),
     mode: "onChange",
     defaultValues: {
-      nome: point?.name || "",
-      descricao: point?.description || "",
-      valor: point?.value || undefined,
-      lat: point?.lat || undefined,
-      lng: point?.lng || undefined,
+      nome: point?.name,
+      descricao: point?.description,
+      valor: point?.value,
+      lat: point?.lat ?? centerCoordinates?.lat,
+      lng: point?.lng ?? centerCoordinates?.lng,
       badges: point?.badges?.join(", ") || "",
     },
   });
+
+  useEffect(() => {
+    const { lat, lng } = centerCoordinates || {};
+    if (lat) setValue("lat", lat);
+    if (lng) setValue("lng", lng);
+  }, [centerCoordinates, setValue]);
 
   const handleFormSubmit = (data: PointFormData) => {
     onSubmit({
@@ -121,21 +134,23 @@ export const PointForm = ({ point, onSubmit, onClose }: PointFormProps) => {
             error={errors.valor?.message}
           />
 
-          <Input
-            placeholder="Insira a latitude"
-            type="number"
-            label="Latitude"
-            {...register("lat")}
-            error={errors.lat?.message}
-          />
+          <div className="hidden">
+            <Input
+              placeholder="Insira a latitude"
+              type="number"
+              label="Latitude"
+              {...register("lat")}
+              error={errors.lat?.message}
+            />
 
-          <Input
-            placeholder="Insira a longitude"
-            type="number"
-            label="Longitude"
-            {...register("lng")}
-            error={errors.lng?.message}
-          />
+            <Input
+              placeholder="Insira a longitude"
+              type="number"
+              label="Longitude"
+              {...register("lng")}
+              error={errors.lng?.message}
+            />
+          </div>
 
           <TagInput
             placeholder="Insira as etiquetas desse pagamento"

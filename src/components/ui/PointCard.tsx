@@ -23,7 +23,7 @@ export const PointCard = ({
   };
 
   return (
-    <li className="bg-white py-5 px-4 rounded-[15px] flex flex-col gap-2 border border-gray-300">
+    <li className="bg-white py-5 px-4 rounded-[15px] flex flex-col gap-2 border border-gray-300 z-0">
       {/* Título, descrição e dropdown */}
       <div className="flex flex-col gap-0">
         <div className="flex justify-between">
@@ -56,7 +56,7 @@ const Dropdown = ({ onEdit, onDelete }: DropdownProps) => {
   const [open, setOpen] = useState(false);
   return (
     <div
-      className="dropdown"
+      className="relative"
       onMouseOver={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
@@ -65,7 +65,7 @@ const Dropdown = ({ onEdit, onDelete }: DropdownProps) => {
       </button>
 
       <div
-        className={`absolute bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44  transistion-all ease-in-out duration-100 ${open ? "max-h-96" : "max-h-0"} overflow-hidden`}
+        className={`absolute right-0 top-full bg-white rounded-lg shadow-sm w-44 transistion-all ease-in-out duration-100 ${open ? "max-h-96" : "max-h-0"} overflow-hidden`}
       >
         <ul className="text-sm text-gray-700">
           {onEdit && (

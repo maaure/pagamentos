@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -10,9 +10,8 @@ import {
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Point } from "../../fakeApi";
-import { PointCard } from "./PointCard";
 
-// Fix para ícones do Leaflet
+// Ícone padrão do Leaflet (usado para os marcadores já existentes)
 const defaultIcon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
   iconRetinaUrl:
@@ -25,6 +24,8 @@ const defaultIcon = L.icon({
 interface MapComponentProps {
   points: Point[];
   onMapClick?: (lat: number, lng: number) => void;
+  addingPoint?: boolean;
+  onCenterChanged?: (lat: number, lng: number) => void;
 }
 
 function MapClickHandler({
@@ -59,43 +60,86 @@ function LocateUser() {
   return null;
 }
 
-export const MapComponent = ({ points, onMapClick }: MapComponentProps) => {
+function UpdateCenterCoordinates({
+  onCenterChanged,
+}: {
+  onCenterChanged: (lat: number, lng: number) => void;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    const updateCenter = () => {
+      const center = map.getCenter();
+      onCenterChanged(center.lat, center.lng);
+    };
+
+    map.on("drag", updateCenter);
+  }, [map, onCenterChanged]);
+
+  return null;
+}
+
+export const MapComponent = ({
+  points,
+  onMapClick,
+  addingPoint = false,
+  onCenterChanged = () => {},
+}: MapComponentProps) => {
   return (
-    <MapContainer
-      center={[-15.77972, -47.92972]} // Posição inicial padrão (Brasília)
-      zoom={13}
-      className="w-full h-full z-0"
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <MapClickHandler onMapClick={onMapClick} />
-      <LocateUser />
-      {points.map((point) => (
-        <Marker
-          key={point.id}
-          position={[point.lat, point.lng]}
-          icon={defaultIcon}
+    <div className="relative w-full h-full">
+      <MapContainer
+        center={[-15.77972, -47.92972]} // Posição inicial padrão (Brasília)
+        zoom={13}
+        className="w-full h-full z-0"
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+
+        <MapClickHandler onMapClick={onMapClick} />
+        <LocateUser />
+
+        {points.map((point) => (
+          <Marker
+            key={point.id}
+            position={[point.lat, point.lng]}
+            icon={defaultIcon}
+          >
+            <Popup>
+              <h2 className="text-lg font-medium text-gray-900">
+                {point.name}
+              </h2>
+              <p className="text-xs text-gray-500 !m-0">{point.description}</p>
+              <p className="text-sm text-emerald-600">
+                <i className="fa-solid fa-coins" /> R$ {point.value}
+                <span className="text-sm text-gray-500">
+                  {` • ${point.badges.join(" • ")}`}
+                </span>
+              </p>
+            </Popup>
+          </Marker>
+        ))}
+
+        {addingPoint && (
+          <UpdateCenterCoordinates onCenterChanged={onCenterChanged} />
+        )}
+      </MapContainer>
+
+      {addingPoint && (
+        <div
+          className="absolute top-1/2 left-1/2 pointer-events-none"
+          style={{
+            transform: "translate(-50%, -100%)",
+          }}
         >
-          <Popup>
-            {/* <PointCard point={point} /> */}
-            <h2 className="text-lg font-medium self-center text-gray-900">
-              {point.name}
-            </h2>
-            <p className="text-xs text-normal text-gray-500 !m-0">
-              {point.description}
-            </p>
-            {/* Valor e badges */}
-            <p className="text-sm text-emerald-600">
-              <i className="fa-solid fa-coins" /> R$ {point.value}
-              <span className="text-sm text-gray-500">
-                {` • ${point.badges.join(" • ")}`}
-              </span>
-            </p>
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+          <img
+            src="https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
+            alt="Marcador central"
+            className="w-full h-full"
+          />
+        </div>
+      )}
+    </div>
   );
 };
